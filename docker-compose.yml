@@ -1,0 +1,10 @@
+services:
+  pptx-thumbnailer:
+    build: .
+    image: pptx-thumbnailer
+    ports:
+      - '3000:3000'
+    environment:
+      THUMBNAILER_CONCURRENCY: '1'
+      MAX_UPLOAD_MB: '100'
+    restart: unless-stopped

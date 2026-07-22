@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+*.pptx
+!test/fixtures/*.pptx
+*-thumbnails/
+.idea/
+.DS_Store

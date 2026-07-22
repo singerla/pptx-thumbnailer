@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run build
+      - name: Smoke test (local conversion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils
+          node dist/cli.js test/fixtures/sample.pptx -o /tmp/thumbs --width 400
+          test -f /tmp/thumbs/slide-1.png && test -f /tmp/thumbs/slide-2.png
+      - name: Smoke test (HTTP service)
+        run: |
+          PORT=3000 node dist/server.js &
+          for i in $(seq 1 30); do curl -fsS http://localhost:3000/healthz && break; sleep 1; done
+          curl -fsS --data-binary @test/fixtures/sample.pptx \
+            'http://localhost:3000/thumbnails?slide=1&as=image' -o /tmp/slide-1.png
+          file /tmp/slide-1.png | grep -q 'PNG image data'
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t pptx-thumbnailer .

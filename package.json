@@ -1,0 +1,53 @@
+{
+  "name": "pptx-thumbnailer",
+  "version": "0.1.0",
+  "description": "Slide thumbnails (PNG/JPEG) from PowerPoint .pptx files via headless LibreOffice — usable as a library, CLI or tiny HTTP microservice (Docker).",
+  "keywords": [
+    "pptx",
+    "powerpoint",
+    "thumbnail",
+    "preview",
+    "slides",
+    "png",
+    "libreoffice",
+    "microservice"
+  ],
+  "license": "MIT",
+  "author": "Thomas Singer <thomas@singer-software.de>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/singerla/pptx-thumbnailer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/singerla/pptx-thumbnailer/issues"
+  },
+  "homepage": "https://github.com/singerla/pptx-thumbnailer#readme",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "pptx-thumbnailer": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "Dockerfile",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "tsc -p tsconfig.json && node dist/server.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "yazl": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/yazl": "^2.4.5",
+    "typescript": "^5.7.0"
+  }
+}
