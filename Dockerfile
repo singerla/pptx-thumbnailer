@@ -10,11 +10,16 @@ RUN npm run build && npm prune --omit=dev
 FROM node:22-bookworm-slim
 
 # libreoffice-impress (not the full suite) is enough for pptx -> pdf;
-# poppler-utils provides pdftocairo. Fonts improve rendering fidelity.
+# poppler-utils provides pdftocairo. Fonts improve rendering fidelity:
+# liberation covers Arial/Times/Courier metrics, crosextra-carlito/-caladea
+# cover Calibri/Cambria (PowerPoint's defaults) — without them line breaks
+# shift wherever a deck uses the Office default fonts.
 RUN apt-get update && apt-get install -y --no-install-recommends \
       libreoffice-impress \
       poppler-utils \
       fonts-liberation \
+      fonts-crosextra-carlito \
+      fonts-crosextra-caladea \
       fonts-dejavu-core \
       curl \
     && rm -rf /var/lib/apt/lists/*

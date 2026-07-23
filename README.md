@@ -65,6 +65,31 @@ JSON response shape:
 Errors: `400` bad request, `413` upload too large, `422` conversion failed,
 `503` (healthz) tools missing.
 
+### Fonts
+
+Faithful rendering (line breaks, text overflow) depends on the fonts a deck
+uses being available — LibreOffice silently substitutes missing ones, and a
+substitute with different glyph widths wraps text differently. The image ships
+metric-compatible replacements for the common Office fonts: Liberation
+(Arial/Times New Roman/Courier New) and Carlito/Caladea (Calibri/Cambria).
+
+For customer-specific fonts (e.g. licensed corporate fonts, which cannot be
+distributed with the image), mount them into the container — fontconfig scans
+`/usr/local/share/fonts` automatically, no rebuild or extra configuration
+needed:
+
+```bash
+docker run --rm -p 3000:3000 \
+  -v ./customer-fonts:/usr/local/share/fonts/custom:ro \
+  pptx-thumbnailer
+```
+
+(or uncomment the `volumes` section in `docker-compose.yml`). Any
+`.ttf`/`.otf` files in the mounted directory are picked up on the next
+conversion. Alternatively, decks saved in PowerPoint with *"Embed fonts in the
+file"* enabled render correctly without any server-side setup, since
+LibreOffice uses the embedded fonts.
+
 ### Environment variables
 
 | Variable                  | Default      | Meaning                             |

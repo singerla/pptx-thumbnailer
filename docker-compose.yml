@@ -7,4 +7,8 @@ services:
     environment:
       THUMBNAILER_CONCURRENCY: '1'
       MAX_UPLOAD_MB: '100'
+    # Custom fonts (e.g. licensed corporate fonts that must not be baked into
+    # the image): mount them read-only into a directory fontconfig scans.
+    # volumes:
+    #   - ./fonts:/usr/local/share/fonts/custom:ro
     restart: unless-stopped
